@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using System.Net;
+using UrlShortener.Infrastructure;
 using Xunit;
 
 namespace UrlShortener.Tests
 {
+
     public class ApiControllerTests
     {
         private readonly HttpClient httpClient;
@@ -32,7 +34,7 @@ namespace UrlShortener.Tests
         public async Task ShouldReturnNotFoundWhenUrlDoesNotExist()
         {
             var response = await httpClient.GetAsync("/abc");
-            Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -55,6 +57,12 @@ namespace UrlShortener.Tests
         {
             builder.UseContentRoot(".");
             builder.UseEnvironment("Development");
+
+            builder.ConfigureServices(services =>
+            {
+                services.AddSingleton<IShortUrlStorage, InMemoryStorage>();
+                services.AddSingleton<INumberSequence, InMemorySequence>();
+            });
 
             base.ConfigureWebHost(builder);
         }

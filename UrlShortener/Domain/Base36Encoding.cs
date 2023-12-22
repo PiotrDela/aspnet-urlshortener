@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace UrlShortener;
+namespace UrlShortener.Domain;
 
 static class Base36Encoding
 {

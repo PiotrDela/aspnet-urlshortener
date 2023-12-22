@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using UrlShortener.Domain;
+using Xunit;
 
 namespace UrlShortener.Tests
 {

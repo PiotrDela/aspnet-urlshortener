@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using UrlShortener.Domain.Entities;
 
-namespace UrlShortener.Commands;
+namespace UrlShortener.Application.Commands;
 
-class ShortentUrlCommand : IRequest<string>
+class ShortentUrlCommand : IRequest<ShortUrl>
 {
     public Uri Url { get; set; }
 

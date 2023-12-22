@@ -13,8 +13,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Pr
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddTransient<IShortUrlStorage, InMemoryStorage>();
-builder.Services.AddTransient<ISequence, InMemorySequence>();
+builder.Services.AddTransient<IShortUrlStorage, SqlServerStorage>();
+builder.Services.AddTransient<INumberSequence, NumberSequence>();
 
 var app = builder.Build();
 

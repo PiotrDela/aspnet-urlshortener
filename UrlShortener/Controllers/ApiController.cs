@@ -1,9 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using UrlShortener.Commands;
+using UrlShortener.Application.Commands;
+using UrlShortener.Application.Queries;
+using UrlShortener.Domain.Entities;
+using UrlShortener.Domain.Exceptions;
 using UrlShortener.Extensions;
-using UrlShortener.Queries;
 
 namespace UrlShortener.Controllers;
 
@@ -28,17 +30,25 @@ public class ApiController: ControllerBase
             return BadRequest("Invalid url");
         }
 
-        var result = await this.sender.Send(new ShortentUrlCommand(uri));
-        var baseUrl = httpContextAccessor.HttpContext?.Request.BaseUrl();
+        ShortUrl shortUrl;
+        try
+        {
+            shortUrl = await this.sender.Send(new ShortentUrlCommand(uri));
+        }
+        catch (DuplicatedEntryException ex)
+        {
+            return Conflict(ex.Message);
+        }
 
-        return new JsonResult(new Uri(baseUrl, result).AbsoluteUri);
+        var baseUrl = httpContextAccessor.HttpContext?.Request.BaseUrl();
+        return new JsonResult(new Uri(baseUrl, shortUrl.Slug).AbsoluteUri);
     }
 
     [Route("/{slug}")]
     [HttpGet]
     public async Task<IActionResult> Index([FromRoute] string slug)
     {
-        var result = await this.sender.Send(new FindUrlMappingQuery(slug));
+        var result = await this.sender.Send(new FindOriginalUrlQuery(slug));
         if (result == null)
         {
             return NotFound();

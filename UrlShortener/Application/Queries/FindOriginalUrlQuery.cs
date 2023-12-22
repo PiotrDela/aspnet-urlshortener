@@ -1,12 +1,12 @@
 ﻿using MediatR;
 
-namespace UrlShortener.Queries;
+namespace UrlShortener.Application.Queries;
 
-class FindUrlMappingQuery : IRequest<Uri>
+class FindOriginalUrlQuery : IRequest<Uri>
 {
     public string ShortUrl { get; set; }
 
-    public FindUrlMappingQuery(string shortUrl)
+    public FindOriginalUrlQuery(string shortUrl)
     {
         ShortUrl = shortUrl ?? throw new ArgumentNullException(nameof(shortUrl));
     }

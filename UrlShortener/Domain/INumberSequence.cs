@@ -1,6 +1,6 @@
 ﻿namespace UrlShortener.Infrastructure;
 
-interface ISequence
+public interface INumberSequence
 {
     public int GetNext();
 }

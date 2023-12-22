@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using UrlShortener.Infrastructure;
 
-namespace UrlShortener.Queries;
+namespace UrlShortener.Application.Queries;
 
-class FindUrlMappingQueryHandler : IRequestHandler<FindUrlMappingQuery, Uri>
+class FindOriginalUrlQueryHandler : IRequestHandler<FindOriginalUrlQuery, Uri>
 {
     private readonly IShortUrlStorage storage;
 
-    public FindUrlMappingQueryHandler(IShortUrlStorage storage)
+    public FindOriginalUrlQueryHandler(IShortUrlStorage storage)
     {
         this.storage = storage ?? throw new ArgumentNullException(nameof(storage));
     }
 
-    public Task<Uri> Handle(FindUrlMappingQuery request, CancellationToken cancellationToken)
+    public Task<Uri> Handle(FindOriginalUrlQuery request, CancellationToken cancellationToken)
     {
-        var mapping = this.storage.Get(request.ShortUrl);
+        var mapping = storage.Find(request.ShortUrl);
         if (mapping != null)
         {
             return Task.FromResult(mapping.OriginalUrl);
